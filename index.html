@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Who's Satyam? 🐐</title>
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #countdown {
+            font-size: 120px;
+            margin-top: 200px;
+        }
+
+        #questionPage {
+            display: none;
+            margin-top: 200px;
+        }
+
+        #revealPage {
+            display: none;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 10px;
+            border: none;
+            background: crimson;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: darkred;
+        }
+
+        .big {
+            font-size: 60px;
+            color: gold;
+            margin-top: 30px;
+            animation: glow 2s infinite alternate;
+        }
+
+        .desc {
+            margin-top: 40px;
+            font-size: 24px;
+            color: #00ffff;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px gold; }
+            to { text-shadow: 0 0 40px orange; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- COUNTDOWN -->
+<div id="countdown">5</div>
+
+<!-- QUESTION PAGE -->
+<div id="questionPage">
+    <h1>Wait… what?</h1>
+    <h2>Who’s Satyam… 🤔</h2>
+    <button onclick="showReveal()">Satyam is...</button>
+</div>
+
+<!-- REVEAL PAGE -->
+<div id="revealPage">
+    <h1>For today you're not Whiteman...</h1>
+
+    <div class="big">You're SATYAM 🐐🔥</div>
+
+    <div class="desc">
+        Satyam the G.O.A.T 💎<br><br>
+        Low Tier 2 in PvP ⚔️<br><br>
+        A Real Gem ✨
+    </div>
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let count = 5;
+let countdown = document.getElementById("countdown");
+let questionPage = document.getElementById("questionPage");
+let revealPage = document.getElementById("revealPage");
+let music = document.getElementById("bgMusic");
+
+let timer = setInterval(function() {
+    count--;
+    countdown.innerHTML = count;
+
+    if (count <= 0) {
+        clearInterval(timer);
+        countdown.style.display = "none";
+        questionPage.style.display = "block";
+    }
+}, 1000);
+
+function showReveal() {
+    questionPage.style.display = "none";
+    revealPage.style.display = "block";
+    music.play();
+}
+</script>
+
+</body>
+</html>
