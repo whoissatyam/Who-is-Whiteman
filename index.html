@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Who is Satyam?</title>
+<title>For Satyam 👑</title>
 
 <style>
 body {
@@ -23,7 +23,12 @@ canvas {
 
 .container {
   position: relative;
-  top: 30vh;
+  top: 25vh;
+  padding: 20px;
+}
+
+h1, h2 {
+  animation: fadeIn 2s ease-in-out;
 }
 
 button {
@@ -44,6 +49,11 @@ button:hover {
 .hidden {
   display: none;
 }
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
 </style>
 </head>
 
@@ -52,7 +62,14 @@ button:hover {
 <canvas id="stars"></canvas>
 
 <div class="container">
-  <h1 id="title">Countdown: <span id="count">5</span></h1>
+
+  <h1 id="countdownTitle">Countdown: <span id="count">5</span></h1>
+
+  <div id="introText" class="hidden">
+    <h1>For today...</h1>
+    <h2>You are not Whiteman.</h2>
+    <h2>You are Satyam 👑</h2>
+  </div>
 
   <div id="revealPage" class="hidden">
     <h1>Wait what... Who's Satyam?</h1>
@@ -63,7 +80,9 @@ button:hover {
     <h1>🔥 SATYAM THE G.O.A.T 🔥</h1>
     <h2>Low Tier 2 PvP Legend 🐐</h2>
     <h2>A Rare Gem 💎</h2>
+    <h2>Happy Birthday Bro ❤️</h2>
   </div>
+
 </div>
 
 <audio id="bgMusic">
@@ -71,7 +90,8 @@ button:hover {
 </audio>
 
 <script>
-// COUNTDOWN
+
+// ===== COUNTDOWN =====
 let count = 5;
 let interval = setInterval(() => {
   count--;
@@ -79,19 +99,24 @@ let interval = setInterval(() => {
 
   if (count === 0) {
     clearInterval(interval);
-    document.getElementById("title").style.display = "none";
-    document.getElementById("revealPage").classList.remove("hidden");
+    document.getElementById("countdownTitle").style.display = "none";
+    document.getElementById("introText").classList.remove("hidden");
+
+    setTimeout(() => {
+      document.getElementById("introText").style.display = "none";
+      document.getElementById("revealPage").classList.remove("hidden");
+    }, 4000);
   }
 }, 1000);
 
-// FINAL REVEAL
+// ===== FINAL REVEAL =====
 function finalReveal() {
   document.getElementById("revealPage").style.display = "none";
   document.getElementById("finalText").classList.remove("hidden");
   document.getElementById("bgMusic").play();
 }
 
-// STAR ANIMATION
+// ===== GALAXY ANIMATION =====
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 
@@ -99,53 +124,63 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let stars = [];
+let shootingStars = [];
 
-for (let i = 0; i < 200; i++) {
+for (let i = 0; i < 250; i++) {
   stars.push({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
-    radius: Math.random() * 2
+    size: Math.random() * 2,
+    speed: Math.random() * 0.4
   });
 }
 
-function drawStars() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+function createShootingStar() {
+  shootingStars.push({
+    x: Math.random() * canvas.width,
+    y: 0,
+    len: Math.random() * 100 + 50,
+    speed: Math.random() * 8 + 6,
+    size: Math.random() * 2 + 1
+  });
+}
+
+function animate() {
+  ctx.fillStyle = "rgba(0,0,0,0.4)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.fillStyle = "white";
   stars.forEach(star => {
+    star.y += star.speed;
+    if (star.y > canvas.height) star.y = 0;
+
     ctx.beginPath();
-    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
     ctx.fill();
   });
 
-  requestAnimationFrame(drawStars);
-}
+  shootingStars.forEach((star, index) => {
+    star.x += star.speed;
+    star.y += star.speed;
 
-drawStars();
-
-// SHOOTING STAR
-function shootingStar() {
-  let x = Math.random() * canvas.width;
-  let y = 0;
-  let length = 200;
-
-  let interval = setInterval(() => {
     ctx.strokeStyle = "white";
+    ctx.lineWidth = star.size;
     ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + length, y + length);
+    ctx.moveTo(star.x, star.y);
+    ctx.lineTo(star.x - star.len, star.y - star.len);
     ctx.stroke();
 
-    x += 20;
-    y += 20;
-
-    if (y > canvas.height) {
-      clearInterval(interval);
+    if (star.y > canvas.height) {
+      shootingStars.splice(index, 1);
     }
-  }, 30);
+  });
+
+  requestAnimationFrame(animate);
 }
 
-setInterval(shootingStar, 3000);
+setInterval(createShootingStar, 2000);
+animate();
+
 </script>
 
 </body>
