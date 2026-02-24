@@ -1,117 +1,151 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Who's Satyam? 🐐</title>
-    <style>
-        body {
-            margin: 0;
-            background: black;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            overflow: hidden;
-        }
+<meta charset="UTF-8">
+<title>Who is Satyam?</title>
 
-        #countdown {
-            font-size: 120px;
-            margin-top: 200px;
-        }
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  background: black;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
 
-        #questionPage {
-            display: none;
-            margin-top: 200px;
-        }
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
 
-        #revealPage {
-            display: none;
-        }
+.container {
+  position: relative;
+  top: 30vh;
+}
 
-        button {
-            margin-top: 30px;
-            padding: 15px 30px;
-            font-size: 20px;
-            border-radius: 10px;
-            border: none;
-            background: crimson;
-            color: white;
-            cursor: pointer;
-        }
+button {
+  padding: 15px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(45deg, #00f2ff, #6a00ff);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-        button:hover {
-            background: darkred;
-        }
+button:hover {
+  transform: scale(1.1);
+}
 
-        .big {
-            font-size: 60px;
-            color: gold;
-            margin-top: 30px;
-            animation: glow 2s infinite alternate;
-        }
-
-        .desc {
-            margin-top: 40px;
-            font-size: 24px;
-            color: #00ffff;
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 10px gold; }
-            to { text-shadow: 0 0 40px orange; }
-        }
-    </style>
+.hidden {
+  display: none;
+}
+</style>
 </head>
+
 <body>
 
-<!-- COUNTDOWN -->
-<div id="countdown">5</div>
+<canvas id="stars"></canvas>
 
-<!-- QUESTION PAGE -->
-<div id="questionPage">
-    <h1>Wait… what?</h1>
-    <h2>Who’s Satyam… 🤔</h2>
-    <button onclick="showReveal()">Satyam is...</button>
+<div class="container">
+  <h1 id="title">Countdown: <span id="count">5</span></h1>
+
+  <div id="revealPage" class="hidden">
+    <h1>Wait what... Who's Satyam?</h1>
+    <button onclick="finalReveal()">Satyam is...</button>
+  </div>
+
+  <div id="finalText" class="hidden">
+    <h1>🔥 SATYAM THE G.O.A.T 🔥</h1>
+    <h2>Low Tier 2 PvP Legend 🐐</h2>
+    <h2>A Rare Gem 💎</h2>
+  </div>
 </div>
 
-<!-- REVEAL PAGE -->
-<div id="revealPage">
-    <h1>For today you're not Whiteman...</h1>
-
-    <div class="big">You're SATYAM 🐐🔥</div>
-
-    <div class="desc">
-        Satyam the G.O.A.T 💎<br><br>
-        Low Tier 2 in PvP ⚔️<br><br>
-        A Real Gem ✨
-    </div>
-</div>
-
-<audio id="bgMusic" loop>
-    <source src="music.mp3" type="audio/mpeg">
+<audio id="bgMusic">
+  <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
+// COUNTDOWN
 let count = 5;
-let countdown = document.getElementById("countdown");
-let questionPage = document.getElementById("questionPage");
-let revealPage = document.getElementById("revealPage");
-let music = document.getElementById("bgMusic");
+let interval = setInterval(() => {
+  count--;
+  document.getElementById("count").innerText = count;
 
-let timer = setInterval(function() {
-    count--;
-    countdown.innerHTML = count;
-
-    if (count <= 0) {
-        clearInterval(timer);
-        countdown.style.display = "none";
-        questionPage.style.display = "block";
-    }
+  if (count === 0) {
+    clearInterval(interval);
+    document.getElementById("title").style.display = "none";
+    document.getElementById("revealPage").classList.remove("hidden");
+  }
 }, 1000);
 
-function showReveal() {
-    questionPage.style.display = "none";
-    revealPage.style.display = "block";
-    music.play();
+// FINAL REVEAL
+function finalReveal() {
+  document.getElementById("revealPage").style.display = "none";
+  document.getElementById("finalText").classList.remove("hidden");
+  document.getElementById("bgMusic").play();
 }
+
+// STAR ANIMATION
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+
+for (let i = 0; i < 200; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: Math.random() * 2
+  });
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "white";
+  stars.forEach(star => {
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  requestAnimationFrame(drawStars);
+}
+
+drawStars();
+
+// SHOOTING STAR
+function shootingStar() {
+  let x = Math.random() * canvas.width;
+  let y = 0;
+  let length = 200;
+
+  let interval = setInterval(() => {
+    ctx.strokeStyle = "white";
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + length, y + length);
+    ctx.stroke();
+
+    x += 20;
+    y += 20;
+
+    if (y > canvas.height) {
+      clearInterval(interval);
+    }
+  }, 30);
+}
+
+setInterval(shootingStar, 3000);
 </script>
 
 </body>
