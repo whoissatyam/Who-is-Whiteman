@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>For Satyam 👑</title>
+<title>King Harry 👑</title>
 
 <style>
 body {
@@ -14,17 +14,11 @@ body {
   text-align: center;
 }
 
-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
-
 .container {
   position: relative;
   top: 25vh;
   padding: 20px;
+  z-index: 2;
 }
 
 h1, h2 {
@@ -36,7 +30,7 @@ button {
   font-size: 18px;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(45deg, #00f2ff, #6a00ff);
+  background: linear-gradient(45deg, #ff0000, #ff8c00);
   color: white;
   cursor: pointer;
   transition: 0.3s;
@@ -46,42 +40,69 @@ button:hover {
   transform: scale(1.1);
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
 @keyframes fadeIn {
   from {opacity: 0;}
   to {opacity: 1;}
+}
+
+/* FIRE BACKGROUND */
+.fire {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 100%, #ff0000, #000000);
+  animation: flicker 0.2s infinite alternate;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+@keyframes flicker {
+  from { filter: brightness(1); }
+  to { filter: brightness(1.3); }
+}
+
+/* Crown Animation */
+.crown {
+  font-size: 80px;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-15px); }
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="stars"></canvas>
+<div class="fire"></div>
 
 <div class="container">
 
-  <h1 id="countdownTitle">Countdown: <span id="count">5</span></h1>
+<h1 id="countdownTitle">Countdown: <span id="count">5</span></h1>
 
-  <div id="introText" class="hidden">
-    <h1>For today...</h1>
-    <h2>You are not Whiteman.</h2>
-    <h2>You are Satyam 👑</h2>
-  </div>
+<div id="introText" class="hidden">
+  <h1>For today...</h1>
+  <h2>You are not Jackie.</h2>
+  <h2>You are HARRY 👑</h2>
+</div>
 
-  <div id="revealPage" class="hidden">
-    <h1>Wait what... Who's Satyam?</h1>
-    <button onclick="finalReveal()">Satyam is...</button>
-  </div>
+<div id="revealPage" class="hidden">
+  <h1>Wait what... Who's Harry?</h1>
+  <button onclick="finalReveal()">Harry is...</button>
+</div>
 
-  <div id="finalText" class="hidden">
-    <h1>🔥 SATYAM THE G.O.A.T 🔥</h1>
-    <h2>Low Tier 2 PvP Legend 🐐</h2>
-    <h2>A Rare Gem 💎</h2>
-    <h2>Happy Birthday Bro ❤️</h2>
-  </div>
+<div id="finalText" class="hidden">
+  <div class="crown">👑</div>
+  <h1>🔥 HARRY THE G.O.A.T 🔥</h1>
+  <h2>HT3 Npot PvPer ⚔️</h2>
+  <h2>The Hidden Gem 💎</h2>
+  <h2>Happy Birthday King 👑</h2>
+</div>
 
 </div>
 
@@ -89,9 +110,11 @@ button:hover {
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <script>
 
-// ===== COUNTDOWN =====
+// COUNTDOWN
 let count = 5;
 let interval = setInterval(() => {
   count--;
@@ -109,77 +132,19 @@ let interval = setInterval(() => {
   }
 }, 1000);
 
-// ===== FINAL REVEAL =====
+// FINAL REVEAL
 function finalReveal() {
   document.getElementById("revealPage").style.display = "none";
   document.getElementById("finalText").classList.remove("hidden");
   document.getElementById("bgMusic").play();
-}
 
-// ===== GALAXY ANIMATION =====
-const canvas = document.getElementById("stars");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let stars = [];
-let shootingStars = [];
-
-for (let i = 0; i < 250; i++) {
-  stars.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    size: Math.random() * 2,
-    speed: Math.random() * 0.4
+  // Confetti Explosion
+  confetti({
+    particleCount: 200,
+    spread: 120,
+    origin: { y: 0.6 }
   });
 }
-
-function createShootingStar() {
-  shootingStars.push({
-    x: Math.random() * canvas.width,
-    y: 0,
-    len: Math.random() * 100 + 50,
-    speed: Math.random() * 8 + 6,
-    size: Math.random() * 2 + 1
-  });
-}
-
-function animate() {
-  ctx.fillStyle = "rgba(0,0,0,0.4)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = "white";
-  stars.forEach(star => {
-    star.y += star.speed;
-    if (star.y > canvas.height) star.y = 0;
-
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-    ctx.fill();
-  });
-
-  shootingStars.forEach((star, index) => {
-    star.x += star.speed;
-    star.y += star.speed;
-
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = star.size;
-    ctx.beginPath();
-    ctx.moveTo(star.x, star.y);
-    ctx.lineTo(star.x - star.len, star.y - star.len);
-    ctx.stroke();
-
-    if (star.y > canvas.height) {
-      shootingStars.splice(index, 1);
-    }
-  });
-
-  requestAnimationFrame(animate);
-}
-
-setInterval(createShootingStar, 2000);
-animate();
 
 </script>
 
